@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        fontFamily: 'Raleway',
         primarySwatch: Colors.blue,
       ),
       localizationsDelegates: [
@@ -58,10 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+          style: TextStyle(fontFamily: 'RobotoMono'),
+        ),
       ),
       body: Center(
         child: Column(
@@ -69,6 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text(
               S.of(context).wellcome,
+              style: TextStyle(
+                  fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
             ),
             Text(
               '$_counter',
