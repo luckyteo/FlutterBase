@@ -38,14 +38,14 @@ class Loading extends StatelessWidget {
 }
 
 class ContainerRepository extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
 
-  const ContainerRepository({Key key, this.child}) : super(key: key);
+  const ContainerRepository({Key? key, this.child}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [],
-      child: child,
+      child: child!,
     );
   }
 }
@@ -54,14 +54,14 @@ class ContainerRepository extends StatelessWidget {
 //  ADD BLOC HERE  ||
 //|||||||||||||||||||
 class ContainerBloc extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
 
-  const ContainerBloc({Key key, this.child}) : super(key: key);
+  const ContainerBloc({Key? key, this.child}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [],
-      child: child,
+      child: child!,
     );
   }
 }

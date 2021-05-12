@@ -6,13 +6,13 @@ mixin LogMixin on Object {
 
   void log(
     String message, {
-    DateTime time,
-    int sequenceNumber,
+    DateTime? time,
+    int? sequenceNumber,
     int level: 0,
-    String name,
-    Zone zone,
-    Object error,
-    StackTrace stackTrace,
+    String? name,
+    Zone? zone,
+    Object? error,
+    StackTrace? stackTrace,
   }) {
     final now = DateTime.now();
     dev.log(

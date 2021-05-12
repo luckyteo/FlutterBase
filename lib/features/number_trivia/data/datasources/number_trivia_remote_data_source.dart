@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_base_clean_architecture/core/error/exception.dart';
 import 'package:flutter_base_clean_architecture/features/number_trivia/data/models/number_trivia_model.dart';
-import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
 abstract class NumberTriviaRemoteDataSource {
@@ -20,7 +19,7 @@ abstract class NumberTriviaRemoteDataSource {
 class NumberTriviaRemoteDataSourceImpl implements NumberTriviaRemoteDataSource {
   final http.Client client;
 
-  NumberTriviaRemoteDataSourceImpl({@required this.client});
+  NumberTriviaRemoteDataSourceImpl({required this.client});
 
   @override
   Future<NumberTriviaModel> getConcreteNumberTrivia(int number) =>

@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_base_clean_architecture/core/http/api_config.dart'
     as ApiConfig;
 import 'package:flutter_base_clean_architecture/core/util/log_mixin.dart';
-import 'package:flutter_base_clean_architecture/core/util/pref_helper.dart';
+import 'package:flutter_base_clean_architecture/core/localstotage/pref_helper.dart';
 
 import 'app_exception.dart';
 
@@ -20,9 +20,9 @@ class AppHttpClient with LogMixin {
     return '${ApiConfig.base_url}$controller';
   }
 
-  static Future<http.Response> doGet(String endpoint,
-      {Map<String, String> headers,
-      Map<String, String> queryParams,
+  static Future<http.Response?> doGet(String endpoint,
+      {Map<String, String>? headers,
+      Map<String, String>? queryParams,
       bool ignoreAuth = false}) async {
     var responseJson;
     try {
@@ -40,9 +40,7 @@ class AppHttpClient with LogMixin {
       if (queryParams != null && queryParams.length > 0) {
         url = "$endpoint?";
         queryParams.forEach((key, value) {
-          if (value != null) {
-            url += "$key=$value&";
-          }
+          url += "$key=$value&";
         });
         url = url.substring(0, url.length - 1);
       } else {
@@ -61,7 +59,7 @@ class AppHttpClient with LogMixin {
       responseJson = response;
       //write log
       log('<== -----END Get $url');
-      _writelog(response);
+      _writeLog(response);
     } on SocketException {
       throw FetchDataException('Connect failed');
     } catch (e, stackTrace) {
@@ -71,9 +69,9 @@ class AppHttpClient with LogMixin {
     return responseJson;
   }
 
-  static Future<http.Response> doPost(String controller,
-      {Map<String, String> params,
-      Map<String, String> headers,
+  static Future<http.Response?> doPost(String controller,
+      {Map<String, String>? params,
+      Map<String, String>? headers,
       bool ignoreAuth = false}) async {
     var responseJson;
     try {
@@ -96,7 +94,7 @@ class AppHttpClient with LogMixin {
 
       log('<== -------END Post  $url');
       //write log
-      _writelog(response);
+      _writeLog(response);
     } catch (error) {
       print(error);
       //throw FetchDataException('Connect failed');
@@ -105,9 +103,9 @@ class AppHttpClient with LogMixin {
     return responseJson;
   }
 
-  static Future<http.Response> doPostStringJson(String controller,
-      {String params,
-      Map<String, String> headers,
+  static Future<http.Response?> doPostStringJson(String controller,
+      {String? params,
+      Map<String, String>? headers,
       bool ignoreAuth = false}) async {
     var responseJson;
     try {
@@ -138,9 +136,9 @@ class AppHttpClient with LogMixin {
     return responseJson;
   }
 
-  static Future<http.Response> doPut(String controller,
-      {Map<String, dynamic> params,
-      Map<String, String> headers,
+  static Future<http.Response?> doPut(String controller,
+      {Map<String, dynamic>? params,
+      Map<String, String>? headers,
       bool ignoreAuth = false}) async {
     var responseJson;
     try {
@@ -164,7 +162,7 @@ class AppHttpClient with LogMixin {
 
       log('<== -----END PUT $url');
       //write log
-      _writelog(response);
+      _writeLog(response);
     } catch (error) {
       print(error);
       //throw FetchDataException('Connect failed');
@@ -174,7 +172,7 @@ class AppHttpClient with LogMixin {
   }
 
   static void _writeRequest(
-      String url, Map<String, String> headers, String body, String method) {
+      String url, Map<String, String> headers, String? body, String method) {
     //write log
     if (!ApiConfig.isWriteLog) {
       return;
@@ -187,37 +185,14 @@ class AppHttpClient with LogMixin {
     log('request body: $body');
   }
 
-  static void _writelog(http.Response response) {
+  static void _writeLog(http.Response response) {
     //write log
     if (!ApiConfig.isWriteLog) {
       return;
     }
     JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-    String prettyHeaders = encoder.convert(response.request.headers);
+    String prettyHeaders = encoder.convert(response.request!.headers);
     log(prettyHeaders);
     log('response ${response.body}');
-  }
-
-  static http.Response _returnResponse(http.Response response) {
-    switch (response.statusCode) {
-      case HttpStatus.ok:
-        var responseJson = json.decode(response.body.toString());
-
-        return responseJson;
-      case HttpStatus.badRequest:
-        throw BadRequestException(response.body.toString());
-        break;
-      case HttpStatus.unauthorized:
-      case HttpStatus.forbidden:
-        throw UnauthorisedException(response.body.toString());
-        break;
-      case HttpStatus.badGateway:
-      default:
-        {
-          throw FetchDataException(
-              'Error occured while Communication with Server with Statuscode: ${response.statusCode}');
-        }
-        return null;
-    }
   }
 }
